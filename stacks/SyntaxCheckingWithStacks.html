@@ -2,9 +2,7 @@
 <html>
 <head>
     <title>Stacks</title>
-    <script src="http://yui.yahooapis.com/3.9.1/build/yui/yui-min.js"></script>
     <script src="js/stacks.js"></script>
-    <script src="js/utils.js"></script>
     <style>
         html, body {margin: 0;padding: 0;font: 14px/18px arial;color: #666;}
         ul, h1, h2, p {margin: 0;padding: 0}
@@ -23,7 +21,7 @@
             color: #666
         }
 
-        #codeInput {
+        #code-input {
             width: 400px;
             height: 200px;
             background-color: #000;
@@ -114,23 +112,30 @@
     }
 
 
-    YUI().use('node', 'messenger', function (Y) {
-        var codeInput = Y.one("#codeInput");
-
-        Y.one("#verify-syntax").on("click", function (e) {
-            var syntaxCheck     = verifySyntax(codeInput.get("value")),
-                msg             = new Y.MSG("#verification-message");
-
-            if (syntaxCheck.errors.length > 0) {
-                msg.displayMessage(syntaxCheck.errors, "Errors")
+ document.addEventListener("DOMContentLoaded", function(event) {
+    var codeInput = document.getElementById('code-input');
+    var syntaxCheckBtn = document.getElementById('verify-syntax');
+    var msg = document.getElementById('verification-message');
+    var syntaxCheck;
+    syntaxCheckBtn.addEventListener('click', function (){
+        var input = codeInput.value;
+        if (input) {
+            syntaxCheck = verifySyntax(input);
+            if (syntaxCheck.errors.length  > 0 ){
+                msg.innerHTML = syntaxCheck.errors;
             }
             else {
-                msg.displayMessage(syntaxCheck.successMessage, "Success!")
+                msg.innerHTML = "Horray! no errors"
             }
+        }
+        else {
+            msg.innerHTML =  "please enter something in"
 
+        }
+    })
 
-        })
-    });
+  });
+
 
 </script>
 
@@ -146,7 +151,7 @@
                 <strong>Type some code here and verify the syntax is correct</strong> <br/>(Eg. Type and if statement
                 and close it with "}" instead of a ")"
             </p>
-            <textarea id="codeInput"></textarea> <br/>
+            <textarea id="code-input"></textarea> <br/>
             <button id="verify-syntax">Verify syntax</button>
 
         </div>
