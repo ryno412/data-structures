@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stacks</title>
+    <script src="http://yui.yahooapis.com/3.9.1/build/yui/yui-min.js"></script>
+    <script src="js/stacks.js"></script>
+    <script src="js/utils.js"></script>
+    <style>
+        html, body {margin: 0;padding: 0;font: 14px/18px arial;color: #666;}
+        ul, h1, h2, p {margin: 0;padding: 0}
+        p {margin-bottom: 15px;}
+
+        h1 {
+            padding-bottom: 10px;
+            padding-top: 5px;
+            color: #000;
+            font-size: 18px;
+        }
+
+        h2 {
+            font-size: 16px;
+            padding: 5px 0 10px;
+            color: #666
+        }
+
+        #codeInput {
+            width: 400px;
+            height: 200px;
+            background-color: #000;
+            color: #00ff00;
+            padding: 10px
+        }
+
+        #container {
+            width: 60%;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+            /* #code-parser-container {padding-top:20px; float: left;}*/
+        #left-col, #right-col {
+            padding-top: 20px
+        }
+
+        #left-col {
+            float: left;
+            width: 405px
+        }
+
+        #right-col {
+            float: right;
+            margin-top: 85px;
+        }
+
+        #verification-message {
+            width: 225px
+        }
+
+        #verification-message ul li {
+            padding-left: 10px;
+            color: red
+        }
+
+        #verify-syntax {
+            height: 35px;
+            width: 120px;
+            margin-top: 10px
+        }
+
+    </style>
+</head>
+<script>
+
+
+    function verifySyntax(inputString) {
+        var stack = new Stack();
+        var results = {
+            errors: [],
+            successMessage: "Syntax is correct!"
+        }
+        for (var i = 0; i < inputString.length; i++) {
+            var ch = inputString.charAt(i);
+            switch (ch) {
+                case '{':
+                case '[':
+                case '(':
+                    stack.push(ch);
+                    break;
+                case '}':
+                case ']':
+                case ')':
+                    if (!stack.isEmpty()) {
+                        var chx = stack.pop();
+                        if ((ch == '}' && chx !== '{') || (ch == ']' && chx !== "[") || (ch == ')' && chx !== "(")) {
+                            results.errors.push("Error: mismatch " + ch + " doesn't match " + chx);
+
+                        }
+                    }
+                    else {
+                        results.errors.push("Error: " + ch + "has no closing bracket");
+                    }
+                    break;
+                default :
+                    break;
+            }//end switch
+
+        }//end for
+        if (!stack.isEmpty()) {
+            results.errors.push("missing right deliminator to close")
+        }
+
+        return results;
+
+    }
+
+
+    YUI().use('node', 'messenger', function (Y) {
+        var codeInput = Y.one("#codeInput");
+
+        Y.one("#verify-syntax").on("click", function (e) {
+            var syntaxCheck     = verifySyntax(codeInput.get("value")),
+                msg             = new Y.MSG("#verification-message");
+
+            if (syntaxCheck.errors.length > 0) {
+                msg.displayMessage(syntaxCheck.errors, "Errors")
+            }
+            else {
+                msg.displayMessage(syntaxCheck.successMessage, "Success!")
+            }
+
+
+        })
+    });
+
+</script>
+
+<body>
+<div id="container">
+    <div id="left-col">
+        <div id="code-parser-container">
+            <h1>Syntax Verification using Stacks</h1>
+
+            <p>This is an example of how stacks can be used to parse code and verify that all brackets match</p>
+
+            <p>
+                <strong>Type some code here and verify the syntax is correct</strong> <br/>(Eg. Type and if statement
+                and close it with "}" instead of a ")"
+            </p>
+            <textarea id="codeInput"></textarea> <br/>
+            <button id="verify-syntax">Verify syntax</button>
+
+        </div>
+    </div>
+    <div id="right-col">
+        <div id="verification-message"></div>
+    </div>
+
+
+</div>
+</body>
+</html>

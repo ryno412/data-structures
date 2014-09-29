@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Fun with queues</title>
+    <script src="http://yui.yahooapis.com/3.9.1/build/yui/yui-min.js"></script>
+    <script>
+        YUI().use('node', function (Y) {
+
+            function TaskQueue(qContainer) {
+                var container   = Y.one(qContainer);
+                var list        = Y.Node.create("<ul>");
+                var queue       = [];
+                var itemMap     = {};
+
+                list.setAttribute("id", "task-list");
+                container.appendChild(list);
+
+                return {
+                    getList: function () {
+                        return list;
+                    },
+                    addItem: function (item) {
+                        queue.push(item);
+                    },
+                    dequeue: function () {
+                        return queue.shift();
+                    },
+                    size: function () {
+                        return queue.length;
+                    },
+                    displayQueueItems: function () {
+                        var frag = document.createDocumentFragment();
+                        queue.forEach(function (value, index, arr) {
+                            var item = Y.Node.create("<li>");
+                            var key = index + "-" + value.text
+                            item.setAttribute("id", key);
+                            item.setHTML(value.text);
+                            if (!itemMap[key]) {
+                                itemMap[key] = item;
+                                frag.appendChild(item.getDOMNode());
+                            }
+                        })
+                        this.getList().appendChild(frag);
+                    },
+                    processTasks: function () {
+                        var taskList        = Y.one("#processed-tasks");
+                        var processedItem   = this.dequeue()
+                        taskList.appendChild(Y.Node.create("<li>").setHTML(processedItem.text))
+                        this.getList().removeChild(this.getList().get("firstChild"))
+
+                    }
+
+
+                }
+            }
+
+            var q = new TaskQueue("#task-container");
+            var taskInput = Y.one("#task-input")
+            Y.one("#add-task").on('click', function (e) {
+                q.addItem({text: taskInput.getDOMNode().value})
+                q.displayQueueItems();
+            });
+            Y.one("#pro-task").on("click", function (e) {
+                q.processTasks()
+            });
+
+        });
+
+
+    </script>
+
+</head>
+
+
+<body>
+
+<h1>task queue</h1>
+
+<div id="task-container"></div>
+
+<div id="add-task-container">
+    <input id="task-input" type="text"/>
+    <button id="add-task">Add Task</button>
+    <button id="pro-task">Process Task</button>
+    </br>
+
+</div>
+<div id="process-task-container">
+    <h2>processed tasks</h2>
+    <ul id="processed-tasks">
+    </ul>
+</div>
+
+
+</body>
+</html>
