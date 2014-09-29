@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Linked Lists in JS</title>
+	<script src="../utils.js"></script>
+</head>
+<body>
+<div id="msg-container"></div>
+
+<script>
+utils.displayMsg('#msg-container', "YO");
+
+function Link (id, key) {
+	this.id = id;
+	this.key = key;
+	this.next = null;
+};
+
+Link.prototype.display = function () {
+	var msg = 'Link item:' + 'id: ' + this.id + ' ' + 'key: ' + this.key;
+	console.log(msg);
+	return msg;
+}
+
+function LinkedList () {
+	this.first = null;
+}
+ LinkedList.prototype = {
+
+ 	addItem : function (id, key) {
+ 		var link = new Link(id, key);
+ 		//when a new link is created set its next link to the first item;
+ 		link.next = this.first;
+ 		this.first = link;
+ 	},
+ 	removeItem : function () {
+ 		//get the first item and store a reference to its "next" link
+ 		//delete the first item
+ 		//set the next link as the first item
+ 		var temp = this.first.next;
+ 		delete this.first;
+ 		this.first = temp;
+ 	},
+ 	display : function () {
+ 		var item = this.first;
+ 		while (item) {
+ 			utils.displayMsg('#msg-container', item.display(), true);
+ 			item = item.next;
+ 		}
+ 	}
+ }
+
+
+var theList = new LinkedList();
+theList.addItem(1, 1.99);
+theList.addItem(2, 2.99);
+theList.addItem(3, 3.99);
+theList.display();
+utils.displayMsg('#msg-container', 'lets delete an item', true);
+theList.removeItem();
+theList.display();
+
+</script>
+
+</body>
+</html>	
