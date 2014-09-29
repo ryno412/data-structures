@@ -10,14 +10,14 @@
 <script>
 utils.displayMsg('#msg-container', "YO");
 
-function Link (id, key) {
+function Link (id, data) {
 	this.id = id;
-	this.key = key;
+	this.data = data;
 	this.next = null;
 };
 
 Link.prototype.display = function () {
-	var msg = 'Link item:' + 'id: ' + this.id + ' ' + 'key: ' + this.key;
+	var msg = 'Link item:' + 'id: ' + this.id + ' ' + 'data: ' + this.data;
 	console.log(msg);
 	return msg;
 }
@@ -27,8 +27,8 @@ function LinkedList () {
 }
  LinkedList.prototype = {
 
- 	addItem : function (id, key) {
- 		var link = new Link(id, key);
+ 	addItem : function (id, data) {
+ 		var link = new Link(id, data);
  		//when a new link is created set its next link to the first item;
  		link.next = this.first;
  		this.first = link;
@@ -38,9 +38,11 @@ function LinkedList () {
  		//delete the first item
  		//set the next link as the first item
  		var temp = this.first.next;
+ 		var oldFirst = this.first;
  		delete this.first;
  		this.first = temp;
- 	},
+ 		return oldFirst;
+ 	},	
  	display : function () {
  		var item = this.first;
  		while (item) {
@@ -55,12 +57,88 @@ var theList = new LinkedList();
 theList.addItem(1, 1.99);
 theList.addItem(2, 2.99);
 theList.addItem(3, 3.99);
-theList.display();
-utils.displayMsg('#msg-container', 'lets delete an item', true);
-theList.removeItem();
+theList.addItem(4, 4.99);
+theList.addItem(5, 5.99);
 theList.display();
 
+//this one requires to much storage to be effecient. 
+function findNthToLastOne (num) {
+	var listItem = theList.removeItem();
+	var items = [];
+	while (listItem) {
+		items.unshift(listItem)
+		listItem = listItem.next;
+	}
+	if (items[num]) {
+		console.log("found item that is " + num + " to last" + items[num].id + " "+ items[num].data);
+	}
+	else {
+		console.log("no item found");
+	}
+}
+
+findNthToLastOne(4);
+findNthToLastOne(2);
+
+
+//this one traverses over the list way to many times.
+function findNthToLastTwo (num) {
+	//start with the first item. get a ref to the next element
+	//so in a list of 3 2 1 the next element would be 2
+	//start with the first item
+	var listItem = theList.removeItem();
+	var tempItem = listItem.next;
+	var i = 1;
+	//loop through the list n times. each time updating list item.
+	while (i < num) {
+		i++;
+		tempItem = tempItem.next;
+	}	
+	//if the list item next is null the end has been reached. and the list item is the item. 
+	if (tempItem.next == null) {
+		console.log("found item" + listItem.id)
+	}
+	//else start again. this time with the next element.
+	else {
+		console.log('starting again')
+		findNthToLastTwo(num);
+	}
+
+}
+findNthToLastTwo(4);
+findNthToLastTwo(2);
+
+
+
+
+/*utils.displayMsg('#msg-container', 'lets delete an item', true);
+theList.removeItem();
+theList.display();*/
+
+
+
 </script>
+
+<div>
+
+<p>given a singly linked list define a time and space effeicent algorithm to find the nth to last element of the list</p>
+<p>step one - define problem - find a link in the list base on its relative postion to the end</p>
+<p>step two - create an example if there were five items in the list and the last item in the list was
+	considered zero find the fourth to last item;
+</p>
+<p>step 3 solution -
+1# traverse the list and put each item into and array with the last item is in the first position.
+then use an array index to look up the item eg listItems[4]
+-- this is ineffienct since the storage will grow in size relative to the list
+
+2# - start with the first item then loop through the next itmes if at the end of the loop the
+next item is null you have found the last item. otherwise upate the item to the next one and 
+do it again until you find null
+--this is inefficent due to the amount of traversals.
+
+</p>
+</div>
+
 
 </body>
 </html>	
