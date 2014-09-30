@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Binary Search Trees in JS</title>
+	<script src="../utils.js"></script>
+</head>
+<body>
+<div id="msg-container"></div>
+
+<script>
+// Tree Node
+  var Node = function (key, data) {
+  	this.key = key;
+  	this.data = data;
+  	this.leftChild = null;
+  	this.rightChild = null;
+  }
+  Node.prototype = {
+  	displayNode  : function () {
+  		console.log('key' + this.key + ' ' + 'Data' + this.data);
+  	}
+
+  }
+
+
+// Binary Search Tree
+var Tree = function () {
+	this.root = null;
+
+}
+
+Tree.prototype = {
+
+	find : function (key) {
+		var current = this.root;
+		while (current !== key) {
+			if (current < key) {
+				current = current.leftChild;	
+			}
+			else {
+				current = current.rightChild;
+			}
+
+			if (current == null) {
+				console.log('key not found');
+			}
+		}//end loop;
+		return current;
+	},
+
+	insert : function (key, data) {
+		var node = new Node(key, data);
+		var current, parent;
+		if (this.root == null) {
+			this.root = node;
+		}
+		else {
+			current = this.root;
+			while (true) {
+				parent = current;
+				if (key < current.key) {
+					//set current as left child
+					current = current.leftChild;
+					//if current is null then there is no left child so insert here and return
+					if (current == null) {
+						parent.leftChild = node;
+						return;
+					}
+				}//end go left
+				else {
+					//set current as right child
+					current = current.rightChild;
+					//if current right child is null insert here.
+					if (current == null) {
+						parent.rightChild = node;
+						return;
+					}
+				}//end go right
+			}//end while loop
+		}
+	},
+
+	delete : function (key) {
+
+	},
+	traverseInOrder : function (localRoot) {
+		if (localRoot != null) {
+			this.traverseInOrder(localRoot.leftChild);
+			console.log('localRoot key' + localRoot.key);
+			this.traverseInOrder(localRoot.rightChild);
+		} 
+	}
+}
+function getRandomNum (min, max) {	
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+console.log(getRandomNum(1,500))
+
+	var tree = new Tree();
+	tree.insert(50, 'frank');
+	tree.insert(25,  'jerry');
+	tree.insert(75, 'tom');
+	tree.insert(8, 'tom');
+	tree.insert(32, 'tom');
+	console.log(tree.root);
+	tree.traverseInOrder(tree.root);
+
+
+
+
+
+</script>
+
+
+
+
+</body>
+</html>	
