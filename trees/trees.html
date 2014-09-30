@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Binary Search Trees in JS</title>
+	<script src="../utils.js"></script>
+</head>
+<body>
+<div id="msg-container"></div>
+
+<script>
+// Tree Node
+  var Node = function (key, data) {
+  	this.key = key;
+  	this.data = data;
+  	this.leftChild = null;
+  	this.rightChild = null;
+  }
+  Node.prototype = {
+  	displayNode  : function () {
+  		console.log('key' + this.key + ' ' + 'Data' + this.data);
+  	}
+
+  }
+
+
+// Binary Search Tree
+var Tree = function () {
+	this.root = null;
+
+}
+
+Tree.prototype = {
+
+	find : function (key) {
+		var current = this.root;
+		while (current !== key) {
+			if (current < key) {
+				current = current.leftChild;	
+			}
+			else {
+				current = current.rightChild;
+			}
+
+			if (current == null) {
+				console.log('key not found');
+			}
+		}//end loop;
+		return current;
+	},
+
+	insert : function (key, data) {
+		var node = new Node(key, data);
+		var current, parent;
+		if (this.root == null) {
+			this.root = node;
+		}
+		else {
+			current = this.root;
+			while (true) {
+				parent = current;
+				if (key < current.key) {
+					//set current as left child
+					current = current.leftChild;
+					//if current is null then there is no left child so insert here and return
+					if (current == null) {
+						parent.leftChild = node;
+						return;
+					}
+				}//end go left
+				else {
+					//set current as right child
+					current = current.rightChild;
+					//if current right child is null insert here.
+					if (current == null) {
+						parent.rightChild = node;
+						return;
+					}
+				}//end go right
+			}//end while loop
+		}
+	},
+
+	delete : function (key) {
+
+	},
+	leftCount : 0,
+	rightCount : 0,
+	getTreeHeight : function (localRoot) {
+		if (localRoot != null) {
+			this.leftCount++;
+			this.getTreeHeight(localRoot.leftChild);
+			this.getTreeHeight(localRoot.rightChild);
+			this.rightCount++
+
+		} 
+		return Math.max(this.leftCount, this.rightCount);
+	},
+	//depth first search
+	//in order vists left then node then right
+	traverseInOrder : function (localRoot) {
+		if (localRoot != null) {
+			//visit left node
+			this.traverseInOrder(localRoot.leftChild);
+			//visit root
+			console.log('localRoot key' + localRoot.key);
+			//visit right node
+			this.traverseInOrder(localRoot.rightChild);
+		} 
+	},
+	//preorder visit node then left then right
+	traversePreOrder : function (localRoot) {
+		if (localRoot != null) {
+			//visit root
+			console.log('localRoot key' + localRoot.key);
+			//visit left node
+			this.traverseInOrder(localRoot.leftChild);
+			//visit right node
+			this.traverseInOrder(localRoot.rightChild);
+		} 
+	},
+	traversePostOrder : function (localRoot) {
+		if (localRoot != null) {
+			//visit left node
+			this.traverseInOrder(localRoot.leftChild);
+			//visit right node
+			this.traverseInOrder(localRoot.rightChild);
+			//visit root
+			console.log('localRoot key' + localRoot.key);
+		} 	
+	},
+	preOrderTravesalNoRecursion : function (localRoot) {
+		//preorder visit node then left then right
+	};
+}
+function getRandomNum () {
+   var min = 1;
+   var max = 1000;
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
+	var tree = new Tree();
+	tree.insert(getRandomNum())
+	tree.insert(getRandomNum())
+	tree.insert(getRandomNum())
+	tree.insert(getRandomNum())
+	tree.insert(getRandomNum())
+	tree.insert(getRandomNum())
+	tree.insert(getRandomNum())
+	console.log(tree.root);
+	console.log("In Order");
+	tree.traverseInOrder(tree.root);
+	console.log("PreOrder");
+	tree.traversePreOrder(tree.root);
+	console.log("PostOrder");
+	tree.traversePostOrder(tree.root);
+
+
+	console.log("TREE HIGHT", tree.getTreeHeight(tree.root));
+
+
+
+//calculate the height of a binary tree
+
+
+
+</script>
+
+
+
+
+</body>
+</html>	
