@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<h1>Strings here we go!</h1>
+
+
+
+<script>
+
+   /*write a function that deletes chars from an ASCII string*/
+    //surprsingly this is the fastest way to to do this!
+    function remove (str, remove) {
+        var replacedStr = '';
+
+        //loop through the string an see if the given letter is in the remove list
+        // change replace into a hash map for quick lookup
+        var replaceMap = {};
+        for (var i = 0; i < remove.length; i++) {
+            var letter = remove.charAt(i);
+            replaceMap[letter] = letter;
+        }
+        for (var j = 0; j < str.length; j++) {
+            var let = str.charAt(j);
+            //if its not in the replace map then add it to the new strin
+            if (!replaceMap[let]) {
+                console.log('we got a replacement');
+                replacedStr += let;
+            }
+        }
+        console.log("REPLACED STRING", replacedStr);
+        return replacedStr;
+
+    }
+
+   var str = "Battle of the Vowles";
+   var replace = "aeiou"
+   remove (str, replace);
+
+   var str1 = "the dog had its day didn't it"
+   var replace1 = 'dt';
+   remove(str1, replace1)
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
