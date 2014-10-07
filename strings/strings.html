@@ -43,11 +43,36 @@
    var replace1 = 'dt';
    remove(str1, replace1)
 
+    //reverse the letters in a string
+    var strToReverse = "Do or do not, there is no try";
+    //solution 1 = split the string into an array  - loop through it and
+    //pop each one off and build a new string from it
+    var sArray = strToReverse.split('');
+     //solution2 itterate over the srting from the bottom and just create a new string from that
 
+    var len = strToReverse.length - 1;
+    var rev  = '';
+    for (var i = len; i >= 0; i--) {
+        rev += strToReverse[i];
+    }
+    console.log("REV", rev);
 
+    //reverse the order of words in a phrase
+    //solution one loop from begginign and  add the letters to  a
+    var temp  = '';
+    var reversedArr = [];
+    for (var j =0; j < strToReverse.length; j++) {
+       var letter = strToReverse[j];
+        temp += letter;
+        if (letter == " " || j == strToReverse.length -1) {
+            reversedArr.unshift(temp);
+            reversedArr.unshift(" ");
+            temp = ''
+        }
+    }
 
-
-
+    var rere =  reversedArr.join("");
+    console.log(rere);
 
 
 </script>
